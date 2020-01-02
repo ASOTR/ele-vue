@@ -59,6 +59,15 @@ exports.cssLoaders = function (options) {
     css: generateLoaders(),
     postcss: generateLoaders(),
     less: generateLoaders('less'),
+    // 解决less mixin @import全局引入的问题
+    // less: generateLoaders('less').concat(
+    //   {
+    //     loader: 'sass-resources-loader',
+    //     options: {
+    //       resources: [path.resolve(__dirname, '../src/common/css/mixin.less'),]
+    //     }
+    //   }
+    // ),
     sass: generateLoaders('sass', { indentedSyntax: true }),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),

@@ -1,0 +1,13 @@
+.editorconfig
+
+
+/dist
+/node_modules
+/config
+/src/assets
+/src/mock
+/static
+
+/src/common/css/iconfont.css
+normalize.css
+

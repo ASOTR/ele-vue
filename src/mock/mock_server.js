@@ -18,43 +18,52 @@ fs.readFile(file,'utf-8',function(err,data){
 
 
 let app = express();        //实例化express
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+// app.all('*',function(req, res, next) { // 设置允许跨域
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header('Access-Control-Allow-Methods', 'PUT,GET,POST,DELETE,OPTIONS');
+//   res.header('Access-Control-Allow-Headers', '*');
+//   next();
+// });
 
 const mock_URL = {
   getSeller : "/mock/seller",
   getGoods :"/mock/goods",
   getRatings : "/mock/ratings"
 }
+const delay = Math.random()*400+1000;
 // 接口
 app.use(mock_URL.getSeller,function(req, res){
   setTimeout(()=>{
     //res.json(Mock.mock(seller.mock_seller()));
-    res.json(dataJson.seller);
-  },Math.random()*400+200);
+    res.json({
+      code: 0,
+      data: dataJson.seller
+    });
+  },delay);
 })
 
 app.use(mock_URL.getGoods,function(req, res){
   setTimeout(()=>{
-    //res.json(Mock.mock(seller.mock_seller()));
-    res.json(dataJson.goods);
-  },Math.random()*400+200);
+    //res.json(Mock.mock(goods.mock_goods()));
+    res.json({
+      code: 0,
+      data: dataJson.goods
+    });
+  },delay);
 })
 
 app.use(mock_URL.getRatings,function(req, res){
   setTimeout(()=>{
-    //res.json(Mock.mock(seller.mock_seller()));
-    res.json(dataJson.ratings);
-  },Math.random()*400+200);
+    //res.json(Mock.mock(ratings.mock_ratings()));
+    res.json({
+      code: 0,
+      data: dataJson.ratings
+    });
+  },delay);
 })
 
 
 app.listen('8090', () => {
-  console.log('mock监听端口 8090')
+  console.log('mock监听端口：8090')
 })
 
