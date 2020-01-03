@@ -285,17 +285,18 @@ export default {
         .detail-supports-title {
           display: flex;
           align-items: center;
-          width: 82%;
+          width: 80%;
           height: 14px;
           margin: 28px auto 28px auto;
           .line {
-            width: 224px;
+            /*flex:1 0 auto 1存在剩余空间时放大 0空间不足缩小 auto默认占据空间大小*/
+            flex: 1;
             height: 1px;
             vertical-align: middle;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
           }
           .title {
-            flex-shrink: 0;
+            flex: 0 1 auto;
             padding: 0 12px 0 12px;
             font-size: 14px;
             font-weight: 700;
