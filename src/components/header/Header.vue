@@ -15,14 +15,14 @@
           <span :class="[iconList[seller.supports[0].type], 'icon']"></span>
           <span class="supports-desc">{{seller.supports[0].description}}</span>
         </div>
-        <div v-if="seller.supports" @click="showDetail" class="btn-supports">
+        <div v-if="seller.supports" @click="showDetail(true)" class="btn-supports">
           <span class="supports-num">{{seller.supports.length}}个</span>
           <span class="icon-keyboard_arrow_right"></span>
         </div>
       </div>
     </div>
     <!-- 公告栏 -->
-    <div class="bulletin-wrapper"  @click="showDetail">
+    <div class="bulletin-wrapper"  @click="showDetail(true)">
       <span class="bulletin-img"></span><!--
       --><span class="bulletin-content">{{seller.bulletin}}</span>
       <span class="bulletin-icon-arrow icon-keyboard_arrow_right"></span>
@@ -37,10 +37,13 @@
         <div class="detail-wrapper clearFix">
           <div class="detail-content">
             <h1 class="detail-seller-name">{{seller.name}}</h1>
+            <div class="detail-star-wrapper">
+              <V-Star :score="seller.score" :size="48"></V-Star>
+            </div>
           </div>
         </div>
         <div class="btn-close clearFix">
-          <span class="icon-close" @click="hideDetail"></span>
+          <span class="icon-close" @click="showDetail(false)"></span>
         </div>
       </div>
     </V-Mask>
@@ -49,11 +52,13 @@
 
 <script>
 import VMask from '@/components/mask/Mask';
+import VStar from '@/components/star/Star';
 
 export default {
   name: 'Header',
   components: {
     'V-Mask': VMask,
+    'V-Star': VStar,
   },
   props: {
     seller: {
@@ -75,11 +80,8 @@ export default {
     // new MaskComponent().$mount('.mask');
   },
   methods: {
-    showDetail() {
-      this.detailShow = true;
-    },
-    hideDetail() {
-      this.detailShow = false;
+    showDetail(val) {
+      this.detailShow = val === undefined ? true : val;
     },
   },
 };
@@ -246,6 +248,10 @@ export default {
           font-weight: 700;
           line-height: 16px;
           text-align: center;
+        }
+        .detail-star-wrapper {
+          margin-top: 18px;
+          line-height: 24px;
         }
       }
     }
