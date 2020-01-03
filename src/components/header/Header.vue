@@ -33,19 +33,39 @@
     </div>
     <!-- 详情遮罩框 -->
     <V-Mask :show="detailShow" filter="blur(5px)">
-      <div v-show="detailShow" class="detail">
-        <div class="detail-wrapper clearFix">
-          <div class="detail-content">
-            <h1 class="detail-seller-name">{{seller.name}}</h1>
-            <div class="detail-star-wrapper">
-              <V-Star :score="seller.score" :size="48"></V-Star>
+      <transition name="fade">
+        <div v-show="detailShow" class="detail">
+          <div class="detail-wrapper clearFix">
+            <div class="detail-content">
+              <h1 class="detail-seller-name">{{seller.name}}</h1>
+              <div class="detail-star-wrapper">
+                <!-- 星级评分组件 -->
+                <V-Star :score="seller.score" :size="48"></V-Star>
+              </div>
+              <div class="detail-supports-title">
+                <div class="line"></div>
+                <div class="title">优惠信息</div>
+                <div class="line"></div>
+              </div>
+              <ul v-if="seller.supports" class="detail-supports-wrapper">
+                <li v-for="(item,index) in seller.supports" :key="index">
+                  <span :class="[iconList[item.type], 'icon']"></span>
+                  <span class="support-description">{{item.description}}</span>
+                </li>
+              </ul>
+              <div class="detail-supports-title">
+                <div class="line"></div>
+                <div class="title">商家公告</div>
+                <div class="line"></div>
+              </div>
+              <p class="detail-bulletin">{{seller.bulletin}}</p>
             </div>
           </div>
+          <div class="btn-close clearFix">
+            <span class="icon-close" @click="showDetail(false)"></span>
+          </div>
         </div>
-        <div class="btn-close clearFix">
-          <span class="icon-close" @click="showDetail(false)"></span>
-        </div>
-      </div>
+      </transition>
     </V-Mask>
   </div>
 </template>
@@ -227,6 +247,15 @@ export default {
       filter: blur(10px);
     }
   }
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: all 0.6s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+    /*transform: translateY(-60%);*/
+  }
   .detail {
     position: fixed;
     top: 0;
@@ -234,7 +263,7 @@ export default {
     z-index: 100;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
     color: rgb(255, 255, 255);
     background-color: rgba(7, 17, 27, 0.8);
     .detail-wrapper {
@@ -242,7 +271,7 @@ export default {
       min-height: 100%;
       .detail-content {
         padding-top: 64px;
-        padding-bottom: 64px;/*底部预留btn-close高度的间距，防止按钮覆盖文本内容*/
+        padding-bottom: 80px;/*底部预留btn-close高度的间距，防止按钮覆盖文本内容*/
         .detail-seller-name {
           font-size: 16px;
           font-weight: 700;
@@ -252,6 +281,60 @@ export default {
         .detail-star-wrapper {
           margin-top: 18px;
           line-height: 24px;
+        }
+        .detail-supports-title {
+          display: flex;
+          align-items: center;
+          width: 82%;
+          height: 14px;
+          margin: 28px auto 28px auto;
+          .line {
+            width: 224px;
+            height: 1px;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+          }
+          .title {
+            flex-shrink: 0;
+            padding: 0 12px 0 12px;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 14px;
+          }
+        }
+        .detail-supports-wrapper {
+          width: 80%;
+          margin: 0 auto;
+          font-size: 0;
+          li {
+            margin-bottom: 6px;
+          }
+          .icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
+            vertical-align: top;
+            background-repeat: no-repeat;
+            background-size: 16px 16px;
+            &.decrease { .bg-image('decrease_2'); }
+            &.discount { .bg-image('discount_2'); }
+            &.guarantee { .bg-image('guarantee_2'); }
+            &.invoice { .bg-image('invoice_2'); }
+            &.special { .bg-image('special_2'); }
+          }
+          .support-description {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 200;
+            line-height: 16px;
+          }
+        }
+        .detail-bulletin {
+          width: 80%;
+          margin: 0 auto;
+          font-size: 12px;
+          line-height: 20px;
         }
       }
     }
