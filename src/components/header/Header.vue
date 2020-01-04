@@ -12,7 +12,13 @@
         </div>
         <div class="description">{{seller.description}} / {{seller.deliveryTime}}分钟送达</div>
         <div v-if="seller.supports" class="supports">
-          <span :class="[iconList[seller.supports[0].type], 'icon']"></span>
+          <!--<span :class="[iconList[seller.supports[0].type], 'icon']"></span>-->
+          <div class="supports-icon">
+            <SupportsIcon
+              type="1"
+              :supports-type="seller.supports[0].type">
+            </SupportsIcon>
+          </div>
           <span class="supports-desc">{{seller.supports[0].description}}</span>
         </div>
         <div v-if="seller.supports" @click="showDetail(true)" class="btn-supports">
@@ -49,7 +55,13 @@
               </div>
               <ul v-if="seller.supports" class="detail-supports-wrapper">
                 <li v-for="(item,index) in seller.supports" :key="index">
-                  <span :class="[iconList[item.type], 'icon']"></span>
+                  <!--<span :class="[iconList[item.type], 'icon']"></span>-->
+                  <div class="supports-icon">
+                    <SupportsIcon
+                      type="2"
+                      :supports-type="item.type">
+                    </SupportsIcon>
+                  </div>
                   <span class="support-description">{{item.description}}</span>
                 </li>
               </ul>
@@ -73,12 +85,14 @@
 <script>
 import VMask from '@/components/mask/Mask';
 import VStar from '@/components/star/Star';
+import SupportsIcon from '@/components/supportsIcon/SupportsIcon';
 
 export default {
   name: 'Header',
   components: {
     'V-Mask': VMask,
     'V-Star': VStar,
+    SupportsIcon,
   },
   props: {
     seller: {
@@ -89,7 +103,7 @@ export default {
   data() {
     return {
       // 根据type对应设置icon背景图标class样式
-      iconList: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
+      // iconList: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
       // 是否显示公共/优惠信息浮层
       detailShow: false,
     };
@@ -156,19 +170,10 @@ export default {
         .supports {
           margin-top: 10px;
           margin-bottom: 2px;
-          .icon {
+          .supports-icon {
             display: inline-block;
-            width: 12px;
-            height: 12px;
             margin-right: 4px;
             vertical-align: middle;
-            background-repeat: no-repeat;
-            background-size: 12px 12px;
-            &.decrease { .bg-image('decrease_1'); }
-            &.discount { .bg-image('discount_1'); }
-            &.guarantee { .bg-image('guarantee_1'); }
-            &.invoice { .bg-image('invoice_1'); }
-            &.special { .bg-image('special_1'); }
           }
           .supports-desc {
             display: inline-block;
@@ -310,19 +315,10 @@ export default {
           li {
             margin-bottom: 6px;
           }
-          .icon {
+          .supports-icon {
             display: inline-block;
-            width: 16px;
-            height: 16px;
             margin-right: 6px;
             vertical-align: top;
-            background-repeat: no-repeat;
-            background-size: 16px 16px;
-            &.decrease { .bg-image('decrease_2'); }
-            &.discount { .bg-image('discount_2'); }
-            &.guarantee { .bg-image('guarantee_2'); }
-            &.invoice { .bg-image('invoice_2'); }
-            &.special { .bg-image('special_2'); }
           }
           .support-description {
             display: inline-block;
