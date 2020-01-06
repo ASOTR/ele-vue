@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="seller-container">
   i am seller
 </div>
 </template>
@@ -11,5 +11,7 @@ export default {
 </script>
 
 <style scoped>
-
+.seller-container {
+  width: 80%;
+}
 </style>

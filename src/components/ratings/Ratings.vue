@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="goods-container">
   i am ratings
 </div>
 </template>
@@ -11,5 +11,7 @@ export default {
 </script>
 
 <style scoped>
-
+.goods-container {
+  width: 100%;
+}
 </style>

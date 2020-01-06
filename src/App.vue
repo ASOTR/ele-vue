@@ -3,9 +3,9 @@
     <div class="app-container">
       <V-Header :seller="seller"/>
       <ul class="tab border-1px">
-        <router-link to="/goods" tag="li">商品</router-link>
-        <router-link to="/ratings" tag="li">评论</router-link>
-        <router-link to="/seller" tag="li">商家</router-link>
+        <router-link to="/goods" tag="li" class="tab-li">商品</router-link>
+        <router-link to="/ratings" tag="li" class="tab-li">评价</router-link>
+        <router-link to="/seller" tag="li" class="tab-li">商家</router-link>
       </ul>
       <router-view>i am container</router-view>
     </div>
@@ -46,10 +46,11 @@ export default {
     padding: 0;
     // border-bottom: 1px solid rgba(7, 17, 27, 0.1);
     .border-1px(rgba(7, 17, 27, 0.1));
-    li {
+    .tab-li {
       display: block;
       flex: 1;/*flex-grow等分空间*/
       font-size: 14px;
+      font-weight: 500;
       line-height: 40px;
       color: rgb(77, 85, 93);
       text-align: center;

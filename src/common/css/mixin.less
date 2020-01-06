@@ -8,6 +8,14 @@
     width: 100%;
     content: ' ';
     border-top: 1px solid @color;
+
+    @media (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5) {
+      transform: scaleY(0.7);
+    }
+
+    @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
+      transform: scaleY(0.5);
+    }
   }
 }
 .bg-image(@imgUrl) {

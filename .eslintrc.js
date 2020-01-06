@@ -37,5 +37,6 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-underscore-dangle': 'off',
     'no-plusplus': 'off',
+    'no-sequences': 'off',
   }
 }

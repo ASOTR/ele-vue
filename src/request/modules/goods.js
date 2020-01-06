@@ -2,7 +2,7 @@ import qs from 'qs'; // 根据需求是否导入qs模块
 import axios from '@/request/httpV2'; // 导入http中创建的axios实例
 
 const goodsURL = {
-  goodsList: '/mock/seller',
+  goodsList: '/mock/goods',
 };
 
 // 获取商品信息
