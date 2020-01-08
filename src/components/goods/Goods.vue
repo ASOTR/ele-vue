@@ -57,6 +57,11 @@
           </ul>
         </li>
       </ul>
+      <div class="goods-item-title">
+        <span v-if="goods[activeIndex]" class="goods-item-title-name">
+          {{goods[activeIndex].name}}
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -101,6 +106,29 @@ export default {
         this.bs_left.scrollToElement(menuItems[this.activeIndex], 300);
       }
     },
+    currentScrollY() {
+      const titleHeight = document.querySelector('.goods-item-title').getBoundingClientRect().height;
+      for (let i = 0; i < this.goodsItem_heightList.length; i++) {
+        const height = this.goodsItem_heightList[i] - titleHeight + 2;
+        if (this.currentScrollY < (height + titleHeight) && this.currentScrollY > height) {
+          const offsetHeight = height - this.currentScrollY;
+          document.querySelector('.goods-item-title-name').setAttribute('style', `transform:translateY(${offsetHeight}px)`);
+          if (document.querySelector('.goods-item-title').style.zIndex === ''
+            || document.querySelector('.goods-item-title').style.zIndex === '0') {
+            document.querySelector('.goods-item-title').style.zIndex = '-1';
+          }
+          break;
+        } else if (document.querySelector('.goods-item-title').style.zIndex === '-1') {
+          document.querySelector('.goods-item-title-name').setAttribute('style', 'transform:none');
+          document.querySelector('.goods-item-title').style.zIndex = '0';
+        }
+        if (this.currentScrollY < 0) {
+          document.querySelector('.goods-item-title').setAttribute('style', 'display:none');
+        } else {
+          document.querySelector('.goods-item-title').setAttribute('style', 'display:block');
+        }
+      }
+    },
   },
   created() {
     this.$_api.goods.getGoodsList().then((res) => {
@@ -139,7 +167,7 @@ export default {
         probeType: 3, // 滑动和momentum滚动动画过程中派发的scroll事件
       });
       this.bs_right.on('scroll', (pos) => {
-        this.currentScrollY = Math.abs(Math.round(pos.y));
+        this.currentScrollY = -(Math.round(pos.y));
       });
     },
     /**
@@ -221,8 +249,26 @@ export default {
     }
   }
   .goods-right-wrapper {
+    position: relative;
     flex: 1;
+    /* 固定展示当前列表所属套餐名称 */
+    .goods-item-title {
+      position: absolute;
+      top: 0;
+      z-index: 0;
+      width: 100%;
+      padding-left: 12px;
+      font-size: 12px;
+      line-height: 26px;
+      color: rgb(147, 153, 159);
+      background-color: #f3f5f7;
+      border-left: 2px solid #d9dde1;
+      .goods-item-title-name {
+        display: inline-block;
+      }
+    }
     .goods-list {
+      z-index: 0;
       padding-bottom: 100px;
       .goods-item {
         .goods-item-name {
