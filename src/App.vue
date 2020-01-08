@@ -7,7 +7,7 @@
         <router-link to="/ratings" tag="li" class="tab-li">评价</router-link>
         <router-link to="/seller" tag="li" class="tab-li">商家</router-link>
       </ul>
-      <router-view>i am container</router-view>
+      <router-view :seller="this.seller"></router-view>
     </div>
   </div>
 </template>

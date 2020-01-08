@@ -63,6 +63,8 @@
         </span>
       </div>
     </div>
+    <!-- 购物车组件 -->
+    <ShoppingCart :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice"></ShoppingCart>
   </div>
 </template>
 
@@ -71,6 +73,7 @@ import BScroll from '@better-scroll/core';
 import MouseWheel from '@better-scroll/mouse-wheel';
 import ObserveDOM from '@better-scroll/observe-dom';
 import SupportsIcon from '@/components/supportsIcon/SupportsIcon';
+import ShoppingCart from '@/components/shoppingCart/ShoppingCart';
 
 BScroll.use(MouseWheel);
 BScroll.use(ObserveDOM);
@@ -79,6 +82,15 @@ export default {
   name: 'Goods',
   components: {
     SupportsIcon,
+    ShoppingCart,
+  },
+  props: {
+    seller: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
   },
   data() {
     return {
@@ -107,25 +119,27 @@ export default {
       }
     },
     currentScrollY() {
-      const titleHeight = document.querySelector('.goods-item-title').getBoundingClientRect().height;
+      const domTitle = document.querySelector('.goods-item-title');
+      const domTitleName = document.querySelector('.goods-item-title-name');
+      const titleHeight = domTitle.getBoundingClientRect().height;
       for (let i = 0; i < this.goodsItem_heightList.length; i++) {
         const height = this.goodsItem_heightList[i] - titleHeight + 2;
         if (this.currentScrollY < (height + titleHeight) && this.currentScrollY > height) {
           const offsetHeight = height - this.currentScrollY;
-          document.querySelector('.goods-item-title-name').setAttribute('style', `transform:translateY(${offsetHeight}px)`);
-          if (document.querySelector('.goods-item-title').style.zIndex === ''
-            || document.querySelector('.goods-item-title').style.zIndex === '0') {
-            document.querySelector('.goods-item-title').style.zIndex = '-1';
+          domTitleName.setAttribute('style', `transform:translateY(${offsetHeight}px)`);
+          if (domTitle.style.zIndex === ''
+            || domTitle.style.zIndex === '0') {
+            domTitle.style.zIndex = '-1';
           }
           break;
-        } else if (document.querySelector('.goods-item-title').style.zIndex === '-1') {
-          document.querySelector('.goods-item-title-name').setAttribute('style', 'transform:none');
-          document.querySelector('.goods-item-title').style.zIndex = '0';
+        } else if (domTitle.style.zIndex === '-1') {
+          domTitleName.setAttribute('style', 'transform:none');
+          domTitle.style.zIndex = '0';
         }
         if (this.currentScrollY < 0) {
-          document.querySelector('.goods-item-title').setAttribute('style', 'display:none');
+          domTitle.setAttribute('style', 'display:none');
         } else {
-          document.querySelector('.goods-item-title').setAttribute('style', 'display:block');
+          domTitle.setAttribute('style', 'display:block');
         }
       }
     },
