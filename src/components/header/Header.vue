@@ -87,15 +87,15 @@ import SupportsIcon from '@/components/supportsIcon/SupportsIcon';
 import VMask from '@/components/mask/Mask';
 // const VMask = () => import('@/components/mask/Mask');
 // import VStar from '@/components/star/Star';
-const VStar = () => import('../../components/star/Star');
+// const VStar = () => import('../../components/star/Star');
 
 
 export default {
   name: 'Header',
   components: {
     'V-Mask': VMask,
-    // 'V-Star': (resolve) => (['../../components/star/Star'], resolve),
-    'V-Star': VStar,
+    'V-Star': (resolve) => (['../../components/star/Star'], resolve),
+    // 'V-Star': VStar,
     SupportsIcon,
   },
   props: {

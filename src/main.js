@@ -3,11 +3,13 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueLazyLoad from 'vue-lazyload';
+import animate from 'animate.css';
 import Goods from 'components/goods/Goods';
 import api from './request/apiV2'; // 导入api接口
 import App from './App';
 import 'normalize.css';
 import 'common/css/index.less';
+
 // import 'core-js/stable';
 // import 'regenerator-runtime/runtime';
 
@@ -28,6 +30,7 @@ Vue.use(VueLazyLoad, {
   attempt: 1,
 });
 Vue.use(VueRouter);
+Vue.use(animate);
 
 const routes = [
   // { path: '', component: Goods },

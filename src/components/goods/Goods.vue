@@ -51,6 +51,12 @@
                   <span class="foods-oldPrice" v-if="foodsItem.oldPrice">
                     ¥{{foodsItem.oldPrice}}
                   </span>
+                  <div class="cart-control-btnWrapper">
+                    <CartControlBtn
+                      @dropBall="dropBall"
+                      :food="foodsItem">
+                    </CartControlBtn>
+                  </div>
                 </div>
               </div>
             </li>
@@ -64,7 +70,13 @@
       </div>
     </div>
     <!-- 购物车组件 -->
-    <ShoppingCart :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice"></ShoppingCart>
+    <ShoppingCart
+      ref="shoppingCart"
+      :selected-foods="selectedFoods"
+      :min-price="seller.minPrice"
+      :delivery-price="seller.deliveryPrice"
+      @dropBallTarget="dropBallTarget">
+    </ShoppingCart>
   </div>
 </template>
 
@@ -74,6 +86,7 @@ import MouseWheel from '@better-scroll/mouse-wheel';
 import ObserveDOM from '@better-scroll/observe-dom';
 import SupportsIcon from '@/components/supportsIcon/SupportsIcon';
 import ShoppingCart from '@/components/shoppingCart/ShoppingCart';
+import CartControlBtn from '@/components/cartControl/CartControlBtn';
 
 BScroll.use(MouseWheel);
 BScroll.use(ObserveDOM);
@@ -83,6 +96,7 @@ export default {
   components: {
     SupportsIcon,
     ShoppingCart,
+    CartControlBtn,
   },
   props: {
     seller: {
@@ -94,7 +108,7 @@ export default {
   },
   data() {
     return {
-      goods: {},
+      goods: [],
       currentScrollY: 0, // 保存实时的Y轴坐标距离
       goodsItem_heightList: [], // 保存每个区块的高度
     };
@@ -105,6 +119,19 @@ export default {
         if (this.currentScrollY < height) return true;
         return false;
       });
+    },
+    selectedFoods() {
+      const list = [];
+      if (this.goods) {
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              list.push(food);
+            }
+          });
+        });
+      }
+      return list;
     },
   },
   watch: {
@@ -179,6 +206,7 @@ export default {
         mouseWheel: true,
         ObserveDOM: true,
         probeType: 3, // 滑动和momentum滚动动画过程中派发的scroll事件
+        click: true,
       });
       this.bs_right.on('scroll', (pos) => {
         this.currentScrollY = -(Math.round(pos.y));
@@ -199,6 +227,12 @@ export default {
     scrollToGoodsItem(index, e) {
       const itemList = document.querySelectorAll('.goods-item-hook');
       this.bs_right.scrollToElement(itemList[index], 0);
+    },
+    dropBallTarget(params) {
+      console.log(params);
+    },
+    dropBall(event) {
+      this.$refs.shoppingCart.dropBall(event);
     },
   },
 };
@@ -221,7 +255,7 @@ export default {
     .menu {
       width: calc(100%);
       /*height: calc(100% - 50px);*/
-      padding-bottom: 50px;
+      padding-bottom: 100px;
       .menu-item {
         height: 54px;
         padding: 0 12px 0 12px;
@@ -351,6 +385,7 @@ export default {
               }
               .foods-price-content {
                 /*margin-top: 8px;*/
+                position: relative;
                 .foods-price-icon {
                   display: inline-block;
                   font-size: 10px;
@@ -374,6 +409,11 @@ export default {
                   color: rgb(147, 153, 159);
                   text-decoration-line: line-through;
                   vertical-align: top;
+                }
+                .cart-control-btnWrapper {
+                  position: absolute;
+                  right: 0;
+                  bottom: 0;
                 }
               }
             }

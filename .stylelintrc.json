@@ -6,6 +6,7 @@
     "comment-whitespace-inside": null,
     "media-feature-name-no-unknown": null,
     "no-empty-source": null,
+    "indentation": null,
     "at-rule-no-unknown": [true, {"ignoreAtRules" :[
       "mixin", "extend", "content"
     ]}]

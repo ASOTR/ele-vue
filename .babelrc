@@ -21,6 +21,7 @@
     ],
     ["@babel/plugin-syntax-dynamic-import"],
     ["transform-vue-jsx"],
+    ["lodash"],
     [
       "import",
       {

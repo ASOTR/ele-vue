@@ -13,6 +13,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 
 const env = require('../config/prod.env')
 
@@ -32,6 +33,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: utils.assetsPath('js/[id].[name].[chunkhash].js')
   },
   plugins: [
+    new LodashModuleReplacementPlugin(),
     new VueLoaderPlugin(),
     new BundleAnalyzerPlugin({
         analyzerPort: 8889,

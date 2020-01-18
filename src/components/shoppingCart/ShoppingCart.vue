@@ -3,7 +3,7 @@
   <div class="left-content">
     <div class="icon-wrapper">
       <div class="icon" :class="{lightHigh:totalCount>0}">
-        <span class="icon-shopping_cart"></span>
+        <span class="icon-shopping_cart drop-ball-target-hook"></span>
       </div>
       <span class="count-num"
             :class="{bigger:totalCount>9}"
@@ -21,6 +21,15 @@
   <div class="right-content" :class="{lightHigh:totalPrice>=minPrice}">
     <span class="pay">{{payDesc}}</span>
   </div>
+  <transition-group
+    name="dropBall"
+    tag="ul"
+    @before-enter="ballBeforeEnter"
+    @after-enter="ballAfterEnter">
+    <li v-for="(ball) in ballList" :key="ball.id" class="ball">
+      <span v-show="ball" class="inner">{{ball.num==''?1:ball.num}}</span>
+    </li>
+  </transition-group>
 </div>
 </template>
 
@@ -43,6 +52,19 @@ export default {
       default: 0,
     },
   },
+  data() {
+    return {
+      ballList: [],
+    };
+  },
+  // mounted() {
+  //   // 小球动画下落点：向父组件返回购物车图标位置
+  //   this.$nextTick(() => {
+  //     const cartIcon = document.querySelector('.icon-shopping_cart');
+  //     const rect = cartIcon.getBoundingClientRect();
+  //     this.$emit('dropBallTarget', [rect.x, rect.y]);
+  //   });
+  // },
   computed: {
     // 计算购物车商品总数
     totalCount() {
@@ -56,7 +78,7 @@ export default {
     totalPrice() {
       let total = 0;
       this.selectedFoods.forEach((item) => {
-        const _price = item.count * item.foodPrice;
+        const _price = item.count * item.price;
         total += _price;
       });
       return total;
@@ -72,6 +94,42 @@ export default {
         desc = `还差¥ ${this.minPrice - this.totalPrice}起送`;
       }
       return desc;
+    },
+  },
+  methods: {
+    dropBall(event) {
+      const beginRect = event.target.getBoundingClientRect();
+      this.ballList.push({
+        beginRect, num: 1, dropping: false, id: Math.random() * 100,
+      });
+    },
+    ballBeforeEnter(el) {
+      /* eslint-disable */
+      const ballTarget = document.querySelector('.drop-ball-target-hook');
+      const targetRect = ballTarget.getBoundingClientRect();
+      for (let i = 0; i < this.ballList.length; i++) {
+        const ball = this.ballList[i];
+        if (!ball.dropping) {
+          this.ballList[i].dropping = true;
+          const { beginRect } = ball;
+          const moveX = beginRect.left - targetRect.left + 5;
+          const moveY = Math.abs(beginRect.top) - Math.abs(targetRect.top - 16);
+          el.style.webkitTransform = `translate3d(0,${moveY}px,0)`;
+          el.style.transform = `translate3d(0,${moveY}px,0)`;
+          const innerSpan = el.querySelector('.inner');
+          innerSpan.style.webkitTransform = `translate3d(${moveX}px,0,0)`;
+          innerSpan.style.transform = `translate3d(${moveX}px,0,0)`;
+          break;
+        }
+      }
+    },
+    ballAfterEnter(el) {
+      const innerSpan = el.querySelector('.inner');
+      el.style.removeProperty('transform');
+      el.style.removeProperty('webkitTransform');
+      innerSpan.style.removeProperty('transform');
+      innerSpan.style.removeProperty('webkitTransform');
+      this.ballList.shift();
     },
   },
 };
@@ -90,7 +148,8 @@ export default {
   .left-content {
     flex: 1;
     background-color: #141d27;
-    opacity: 0.95;
+    /*background-color: rgba(#141d27, 0.9);*/
+    /*opacity: 0.95;*/
     .icon-wrapper {
       position: relative;
       top: -14px;
@@ -191,6 +250,24 @@ export default {
       .pay {
         color: #fff;
       }
+    }
+  }
+  .ball {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    transition: all 0.4s cubic-bezier(0.32, -0.48, 0.86, 0.76);
+    .inner {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      font-size: 10px;
+      line-height: 22px;
+      color: #fff;
+      text-align: center;
+      background-color: rgb(0, 160, 220);
+      border-radius: 50%;
+      transition: all 0.4s ease;
     }
   }
 }
