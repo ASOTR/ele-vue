@@ -1,5 +1,5 @@
 # ele-vue
-仿饿了么（旧版）vue demo
+仿饿了么   vue demo
 
 # 项目描述
 
